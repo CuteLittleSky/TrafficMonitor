@@ -668,11 +668,6 @@ void CTaskBarDlg::DPI(CRect& rect) const
 
 CTaskBarDlg::ClassCheckWindowMonitorDPIAndHandle CTaskBarDlg::CheckWindowMonitorDPIAndHandle{};
 
-UINT CTaskBarDlg::ClassCheckWindowMonitorDPIAndHandle::buffered_dpi_x{0};
-UINT CTaskBarDlg::ClassCheckWindowMonitorDPIAndHandle::buffered_dpi_y{0};
-UINT CTaskBarDlg::ClassCheckWindowMonitorDPIAndHandle::dpi_x{0};
-UINT CTaskBarDlg::ClassCheckWindowMonitorDPIAndHandle::dpi_y{0};
-
 HWND CTaskBarDlg::FindTaskbarHandle(bool& is_scendary_display)
 {
     if (m_taskbar_target != nullptr && ::IsWindow(m_taskbar_target))
@@ -1161,7 +1156,7 @@ void CTaskBarDlg::OnInitMenu(CMenu* pMenu)
         }
     }
 
-    ::SendMessage(theApp.m_pMainWnd->GetSafeHwnd(), WM_TASKBAR_MENU_POPED_UP, 0, 0); //通知主窗口菜单已弹出
+    ::SendMessage(theApp.m_pMainWnd->GetSafeHwnd(), WM_TASKBAR_MENU_POPED_UP, reinterpret_cast<WPARAM>(GetSafeHwnd()), 0); //通知主窗口菜单已弹出
 }
 
 BOOL CTaskBarDlg::PreTranslateMessage(MSG* pMsg)
@@ -1250,14 +1245,12 @@ void CTaskBarDlg::OnTimer(UINT_PTR nIDEvent)
         }
         
         //每秒钟重新计算窗口的宽度，如果发生变化，则重新调整任务栏窗口位置
-        static int last_window_width = m_window_width;
-        static int last_window_height = m_window_height;
         CalculateWindowSize();
-        if (last_window_width != m_window_width || last_window_height != m_window_height)
+        if (m_last_window_width != m_window_width || m_last_window_height != m_window_height)
         {
             WidthChanged();
-            last_window_width = m_window_width;
-            last_window_height = m_window_height;
+            m_last_window_width = m_window_width;
+            m_last_window_height = m_window_height;
         }
     }
 

@@ -58,6 +58,7 @@ protected:
     NOTIFYICONDATA m_ntIcon;    //通知区域图标
     CTaskBarDlg* m_tBarDlg{};     //任务栏窗口的指针
     std::vector<CTaskBarDlg*> m_tBarDlg_all;    //所有任务栏窗口（多显示器模式）
+    HWND m_taskbar_menu_source_hwnd{};           //当前弹出任务栏菜单的窗口句柄
 
     vector<NetWorkConection> m_connections; //保存获取到的要显示到“选择网卡”菜单项中的所有网络连接
     MIB_IFTABLE* m_pIfTable;
@@ -166,6 +167,7 @@ protected:
     void CloseTaskBarWnd(); //关闭任务栏窗口
     void OpenTaskBarWnd();  //打开任务栏窗口
     void ForEachTaskbarWnd(const std::function<void(CTaskBarDlg*)>& callback);
+    CTaskBarDlg* GetTaskbarWndByHwnd(HWND hwnd) const;
 
     void AddNotifyIcon();       //添加通知区图标
     void DeleteNotifyIcon();

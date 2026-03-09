@@ -426,7 +426,7 @@ BOOL CTaskBarSettingsDlg::OnInitDialog()
     CTaskbarHelper::GetAllSecondaryDisplayTaskbar(secondary_displays);
     //初始化“显示任务栏窗口的显示器”下拉列表
     m_displays_combo.AddString(CCommon::LoadText(IDS_PRIMARY_DISPLAY));
-    m_displays_combo.AddString(_T("All Displays"));
+    m_displays_combo.AddString(CCommon::LoadText(IDS_ALL_DISPLAYS, _T("All Displays")));
     for (size_t i = 0; i < secondary_displays.size(); i++)
     {
         m_displays_combo.AddString(CCommon::LoadTextFormat(IDS_SECONDARY_DISPLAY, { i + 1 }));

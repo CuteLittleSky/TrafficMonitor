@@ -59,21 +59,15 @@ public:
         template <class HandlerFunc>
         void operator()(CTaskBarDlg& ref_taskbar_window, HandlerFunc handler)
         {
+            UINT dpi_x{}, dpi_y{};
             bool rtn = theApp.DPIFromRect(ref_taskbar_window.GetRectForDpiCheck(), &dpi_x, &dpi_y);
             //只取dpi_x作为程序dpi
-            if (rtn && (dpi_x != buffered_dpi_x || dpi_y != buffered_dpi_y))
+            if (rtn && dpi_x != ref_taskbar_window.GetDPI())
             {
-                //更新缓存的数据
-                buffered_dpi_x = dpi_x;
-                buffered_dpi_y = dpi_y;
                 //调用用户自定义处理方法
                 handler(dpi_x, dpi_y);
             }
         }
-
-    private:
-        static UINT buffered_dpi_x, buffered_dpi_y;
-        static UINT dpi_x, dpi_y;
     } CheckWindowMonitorDPIAndHandle;
 
     // 对话框数据
@@ -146,6 +140,8 @@ protected:
     bool m_connot_insert_to_task_bar{ false };	//如果窗口无法嵌入任务栏，则为true
     bool m_taskbar_on_top_or_bottom{ true };		//如果任务栏在屏幕顶部或底部，则为ture
     int m_error_code{};
+    int m_last_window_width{};
+    int m_last_window_height{};
     bool m_menu_popuped{ false };               //指示当前是否有菜单处于弹出状态
     bool m_is_secondary_display{ false };       //是否显示在副显示器中
     bool m_is_width_changed{ false };
