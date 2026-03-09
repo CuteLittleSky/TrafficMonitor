@@ -23,6 +23,7 @@ class CTaskBarDlg : public CDialogEx
 public:
     CTaskBarDlg(CWnd* pParent = NULL);   // 标准构造函数
     virtual ~CTaskBarDlg();
+    void SetTaskbarTarget(HWND taskbar_hwnd, bool is_secondary_display);
 
     CToolTipCtrl m_tool_tips;
 
@@ -148,6 +149,8 @@ protected:
     bool m_menu_popuped{ false };               //指示当前是否有菜单处于弹出状态
     bool m_is_secondary_display{ false };       //是否显示在副显示器中
     bool m_is_width_changed{ false };
+    HWND m_taskbar_target{};
+    bool m_taskbar_target_is_secondary{};
 
     UINT m_taskbar_dpi{};//TaskBarDlg自身专用dpi
 

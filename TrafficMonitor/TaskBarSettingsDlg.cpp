@@ -308,7 +308,7 @@ BOOL CTaskBarSettingsDlg::OnInitDialog()
     ((CButton*)GetDlgItem(IDC_SEPARATE_VALUE_UNIT_CHECK))->SetCheck(m_data.separate_value_unit_with_space);
     ((CButton*)GetDlgItem(IDC_SHOW_TOOL_TIP_CHK))->SetCheck(m_data.show_tool_tip);
 
-    CheckDlgButton(IDC_TASKBAR_WND_IN_SECONDARY_DISPLAY_CHECK, m_data.show_taskbar_wnd_in_secondary_display);
+    CheckDlgButton(IDC_TASKBAR_WND_IN_SECONDARY_DISPLAY_CHECK, m_data.show_taskbar_wnd_in_secondary_display || m_data.show_taskbar_wnd_in_all_displays);
 
     m_text_color_static.SetLinkCursor();
     m_back_color_static.SetLinkCursor();
@@ -426,17 +426,22 @@ BOOL CTaskBarSettingsDlg::OnInitDialog()
     CTaskbarHelper::GetAllSecondaryDisplayTaskbar(secondary_displays);
     //初始化“显示任务栏窗口的显示器”下拉列表
     m_displays_combo.AddString(CCommon::LoadText(IDS_PRIMARY_DISPLAY));
+    m_displays_combo.AddString(_T("All Displays"));
     for (size_t i = 0; i < secondary_displays.size(); i++)
     {
         m_displays_combo.AddString(CCommon::LoadTextFormat(IDS_SECONDARY_DISPLAY, { i + 1 }));
     }
-    if (!m_data.show_taskbar_wnd_in_secondary_display)
+    if (m_data.show_taskbar_wnd_in_all_displays)
+    {
+        m_displays_combo.SetCurSel(1);
+    }
+    else if (!m_data.show_taskbar_wnd_in_secondary_display)
     {
         m_displays_combo.SetCurSel(0);
     }
     else
     {
-        int combo_index = m_data.secondary_display_index + 1;
+        int combo_index = m_data.secondary_display_index + 2;
         int combo_item_count = m_displays_combo.GetCount();
         if (combo_index >= combo_item_count)
             combo_index = combo_item_count - 1;
@@ -958,7 +963,19 @@ void CTaskBarSettingsDlg::OnBnClickedWin11SettingsButton()
 
 void CTaskBarSettingsDlg::OnBnClickedTaskbarWndInSecondaryDisplayCheck()
 {
-    m_data.show_taskbar_wnd_in_secondary_display = (IsDlgButtonChecked(IDC_TASKBAR_WND_IN_SECONDARY_DISPLAY_CHECK) != FALSE);
+    bool checked = (IsDlgButtonChecked(IDC_TASKBAR_WND_IN_SECONDARY_DISPLAY_CHECK) != FALSE);
+    if (!checked)
+    {
+        m_data.show_taskbar_wnd_in_secondary_display = false;
+        m_data.show_taskbar_wnd_in_all_displays = false;
+        m_displays_combo.SetCurSel(0);
+    }
+    else if (m_displays_combo.GetCurSel() == 0)
+    {
+        m_data.show_taskbar_wnd_in_all_displays = true;
+        m_data.show_taskbar_wnd_in_secondary_display = false;
+        m_displays_combo.SetCurSel(1);
+    }
 }
 
 
@@ -969,13 +986,21 @@ void CTaskBarSettingsDlg::OnCbnSelchangeDisplayToShowTaskbarWndCombo()
     if (combo_index == 0)
     {
         m_data.show_taskbar_wnd_in_secondary_display = false;
+        m_data.show_taskbar_wnd_in_all_displays = false;
+    }
+    else if (combo_index == 1)
+    {
+        m_data.show_taskbar_wnd_in_secondary_display = false;
+        m_data.show_taskbar_wnd_in_all_displays = true;
     }
     else
     {
         m_data.show_taskbar_wnd_in_secondary_display = true;
-        m_data.secondary_display_index = combo_index - 1;
+        m_data.show_taskbar_wnd_in_all_displays = false;
+        m_data.secondary_display_index = combo_index - 2;
 
     }
+    CheckDlgButton(IDC_TASKBAR_WND_IN_SECONDARY_DISPLAY_CHECK, combo_index > 0);
 }
 
 

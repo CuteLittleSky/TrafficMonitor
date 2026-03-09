@@ -36,6 +36,12 @@ CTaskBarDlg::~CTaskBarDlg()
     }
 }
 
+void CTaskBarDlg::SetTaskbarTarget(HWND taskbar_hwnd, bool is_secondary_display)
+{
+    m_taskbar_target = taskbar_hwnd;
+    m_taskbar_target_is_secondary = is_secondary_display;
+}
+
 void CTaskBarDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialogEx::DoDataExchange(pDX);
@@ -669,6 +675,12 @@ UINT CTaskBarDlg::ClassCheckWindowMonitorDPIAndHandle::dpi_y{0};
 
 HWND CTaskBarDlg::FindTaskbarHandle(bool& is_scendary_display)
 {
+    if (m_taskbar_target != nullptr && ::IsWindow(m_taskbar_target))
+    {
+        is_scendary_display = m_taskbar_target_is_secondary;
+        return m_taskbar_target;
+    }
+
     is_scendary_display = false;
     HWND hTaskbar = nullptr;
     //显示在副显示器上
