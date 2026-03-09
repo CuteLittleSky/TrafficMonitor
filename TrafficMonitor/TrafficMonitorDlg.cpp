@@ -2933,7 +2933,7 @@ afx_msg LRESULT CTrafficMonitorDlg::OnDpichanged(WPARAM wParam, LPARAM lParam)
         if (pThis->IsTaskbarWndValid() && !theApp.m_win_version.IsWindows8Point1OrLater())
         {
             //为任务栏窗口重新指定DPI
-            pThis->ForEachTaskbarWnd([dpi](CTaskBarDlg* taskbar_wnd) { taskbar_wnd->SetDPI(dpi); });
+            pThis->ForEachTaskbarWnd([](CTaskBarDlg* taskbar_wnd) { taskbar_wnd->SetDPI(dpi); });
             //根据新的DPI重新设置任务栏窗口字体
             pThis->ForEachTaskbarWnd([](CTaskBarDlg* taskbar_wnd) { taskbar_wnd->SetTextFont(); });
         }
