@@ -1,3 +1,10 @@
+修改内容：支持同时在所有显示器上显示状态栏，使用AI完成本功能
+<img width="2860" height="282" alt="d92652edf5d71ddf0dffbbdd9c6e84ce" src="https://github.com/user-attachments/assets/fb899d30-ac8f-4f35-ba28-0e939777a609" />
+<img width="1644" height="350" alt="PixPin_2026-03-09_20-09-05" src="https://github.com/user-attachments/assets/48d5e55f-8bfe-443f-9313-7ed538348b83" />
+
+
+
+
 **简体中文 | [English](./README_en-us.md)**
 
 [![Badge](https://img.shields.io/badge/link-996.icu-%23FF4D5B.svg?style=flat-square)](https://996.icu/#/en_US)
